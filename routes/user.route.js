@@ -1,6 +1,6 @@
 import express from "express";
 import { body } from "express-validator";
-import { userRegister, userSignIn } from "../controllers/user.controller.js";
+import { userRegister, userSignIn, getAllUsers } from "../controllers/user.controller.js";
 import { tokenAuth } from "../middlewares/token.middleware.js";
 import { validate } from "../utils/validator.js";
 
@@ -15,6 +15,8 @@ router.post(
   body("password")
     .exists().withMessage("password is required")
     .isLength({ min: 8 }).withMessage("password must have at least 8 characters"),
+  body("email")
+    .exists().withMessage("password is required"),
   validate,
   userRegister
 );
@@ -37,6 +39,19 @@ router.get(
   (req, res) => res.status(200).json({
     username: req.user.username
   })
+);
+
+router.get(
+  "/getAll",
+  getAllUsers
+  // (req, res) => res.status(200).json({
+  //   username: "asdf"
+  // }),
+
+  // tokenAuth,
+  // (req, res) => res.status(200).json({
+  //   username: req.user.username
+  // })
 );
 
 export default router;
